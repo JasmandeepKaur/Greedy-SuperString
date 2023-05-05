@@ -35,7 +35,6 @@ def calc_overlap(seq1, seq2):
 def main():
     args = get_args() # collect commandline arguments
     seqs = read_fasta(args.fasta) # collect sequences from fasta
-    print(countChars(seqs))
     start_time = time.time()
     # continue merging while there is more than one sequence
     while len(seqs) > 1:
@@ -56,4 +55,8 @@ def main():
         seqs.append(new_seq)
     print("--- %s seconds ---" % (time.time() - start_time))
     print(seqs[0])
+    ATGC = countChars(seqs)
+    print("Length of greedy superstring: " + str(len(seqs[0])))
+    for c in ATGC:
+        print(c + " : " + str(ATGC[c]))
 main()
