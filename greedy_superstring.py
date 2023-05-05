@@ -1,4 +1,5 @@
 import argparse
+import time
 
 def get_args():
     """Read in fasta path from command line"""
@@ -17,6 +18,13 @@ def read_fasta(fasta):
     f.close()
     return seqs
 
+def countChars(fasta):
+    ATGC = {"A" : 0, "T" : 0, "G" : 0, "C" : 0}
+    for s in fasta:
+        for c in s:
+            ATGC[c] +=1
+    return ATGC
+
 def calc_overlap(seq1, seq2):
     """Calculate the overlap between the end of seq1 and the beginning of seq2"""
     for k in range(min(len(seq1),len(seq2)),0,-1):
@@ -27,7 +35,8 @@ def calc_overlap(seq1, seq2):
 def main():
     args = get_args() # collect commandline arguments
     seqs = read_fasta(args.fasta) # collect sequences from fasta
-
+    print(countChars(seqs))
+    start_time = time.time()
     # continue merging while there is more than one sequence
     while len(seqs) > 1:
         max_overlap = -1
@@ -45,5 +54,6 @@ def main():
         new_seq = seqs[ind1] + seqs[ind2][max_overlap:]
         seqs = [x for i, x in zip(range(len(seqs)),seqs) if i not in [ind1, ind2]]
         seqs.append(new_seq)
+    print("--- %s seconds ---" % (time.time() - start_time))
     print(seqs[0])
 main()
